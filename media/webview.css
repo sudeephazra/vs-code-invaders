@@ -1,0 +1,66 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Full-panel letterbox; centers the shrink-wrapped screen. */
+#stage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The "tube": hugs the canvas exactly so CRT layers cover only the game area.
+   font-size 0 kills the inline-gap below the canvas. */
+#screen {
+  position: relative;
+  font-size: 0;
+}
+
+#game {
+  display: block;
+}
+
+/* CRT layers (PLAN §6) — toggled via .crt-full / .crt-scanlines on #screen.
+   The glow (filter: drop-shadow) is set inline by crt.ts so it can follow the palette. */
+#crt-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Scanlines: 1px dark / 1px clear repeating pattern, ~15% opacity. */
+.crt-scanlines #crt-overlay {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+}
+
+/* Full mode: scanlines plus a vignette that, with the rounded corners below,
+   sells the curved-tube illusion. */
+.crt-full #crt-overlay {
+  background-image:
+    radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.38) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.15) 0px,
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+}
+
+.crt-full {
+  border-radius: 10px;
+  overflow: hidden;
+}
